@@ -1,0 +1,113 @@
+{
+  "kind": "incident-capsule-report",
+  "version": "1",
+  "generatedAt": "sample-fixture",
+  "source": {
+    "inputPath": "./sample/incidents/demo-incident"
+  },
+  "summary": {
+    "artifactCount": 5,
+    "processedCount": 4,
+    "ignoredCount": 1,
+    "unreadableCount": 0,
+    "warningCount": 2,
+    "malformedCount": 1
+  },
+  "analysis": {
+    "timeline": [
+      {
+        "timestamp": "2026-04-30T12:01:00Z",
+        "summary": "deploy started for checkout-api by oncall@payments",
+        "source": "notes.md"
+      },
+      {
+        "timestamp": "2026-04-30T12:02:00Z",
+        "summary": "INFO deploy started service=checkout-api owner=payments-oncall",
+        "source": "current.log"
+      },
+      {
+        "timestamp": "2026-04-30T12:03:00Z",
+        "summary": "\"timestamp\": \"\",",
+        "source": "telemetry.json"
+      },
+      {
+        "timestamp": "2026-04-30T12:03:00Z",
+        "summary": "latency crossed 2s",
+        "source": "telemetry.json"
+      },
+      {
+        "timestamp": "2026-04-30T12:04:00Z",
+        "summary": "error rate spiked in checkout-api",
+        "source": "notes.md"
+      },
+      {
+        "timestamp": "2026-04-30T12:05:00Z",
+        "summary": "ERROR TypeError: Cannot read properties of undefined requestId=123 checkout step failed",
+        "source": "current.log"
+      },
+      {
+        "timestamp": "2026-04-30T12:06:00Z",
+        "summary": "ERROR TypeError: Cannot read properties of undefined requestId=456 checkout step failed",
+        "source": "current.log"
+      },
+      {
+        "timestamp": "2026-04-30T12:07:00Z",
+        "summary": "WARN retrying checkout worker service=checkout-api",
+        "source": "current.log"
+      }
+    ],
+    "signatures": [
+      {
+        "signature": "TypeError: Cannot read properties of undefined",
+        "count": 2
+      }
+    ],
+    "serviceHints": [
+      "checkout-api"
+    ],
+    "ownerHints": [
+      "payments-oncall"
+    ]
+  },
+  "artifacts": [
+    {
+      "relativePath": "bad.json",
+      "kind": "malformed-json",
+      "supported": true,
+      "size": 41,
+      "warnings": [
+        "Unexpected token '}', ...\"\"broken\": }\n\" is not valid JSON"
+      ]
+    },
+    {
+      "relativePath": "current.log",
+      "kind": "log",
+      "supported": true,
+      "size": 374,
+      "warnings": []
+    },
+    {
+      "relativePath": "notes.md",
+      "kind": "markdown",
+      "supported": true,
+      "size": 188,
+      "warnings": []
+    },
+    {
+      "relativePath": "screenshots/checkout.png",
+      "kind": "ignored-binary",
+      "supported": false,
+      "size": 92,
+      "warnings": [
+        "Artifact type is not ingested in this release."
+      ]
+    },
+    {
+      "relativePath": "telemetry.json",
+      "kind": "json",
+      "supported": true,
+      "size": 246,
+      "warnings": []
+    }
+  ]
+}

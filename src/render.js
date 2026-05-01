@@ -11,8 +11,8 @@ function formatWarnings(report) {
     .join('\n');
 }
 
-export async function buildReport({ inputPath }) {
-  const capsule = await buildCapsule({ inputPath });
+export async function buildReport({ inputPath, sourceLabel }) {
+  const capsule = await buildCapsule({ inputPath, sourceLabel });
   const analysis = analyzeCapsule(capsule);
 
   return {

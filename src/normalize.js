@@ -14,7 +14,20 @@ function withWarnings(artifact, warnings) {
 }
 
 async function readTextArtifact(artifact) {
-  const content = await fs.readFile(artifact.absolutePath, 'utf8');
+  let content;
+
+  try {
+    content = await fs.readFile(artifact.absolutePath, 'utf8');
+  } catch (error) {
+    return {
+      ...artifact,
+      kind: 'unreadable-text',
+      warnings: [error.message],
+      contentLength: 0,
+      excerpt: '',
+    };
+  }
+
   const excerpt = content.slice(0, EXCERPT_LIMIT);
   const warnings = [];
 
@@ -48,7 +61,7 @@ async function normalizeArtifact(artifact) {
   }
 
   try {
-    const parsed = JSON.parse(textArtifact.excerpt);
+    const parsed = JSON.parse(await fs.readFile(artifact.absolutePath, 'utf8'));
     return {
       ...textArtifact,
       parsed,
@@ -62,7 +75,7 @@ async function normalizeArtifact(artifact) {
   }
 }
 
-export async function buildCapsule({ inputPath }) {
+export async function buildCapsule({ inputPath, sourceLabel = inputPath }) {
   const collectedArtifacts = await collectArtifacts({ inputPath });
   const artifacts = [];
 
@@ -73,18 +86,20 @@ export async function buildCapsule({ inputPath }) {
   const warningCount = artifacts.reduce((count, artifact) => count + artifact.warnings.length, 0);
   const ignoredCount = artifacts.filter((artifact) => !artifact.supported).length;
   const processedCount = artifacts.length - ignoredCount;
+  const unreadableCount = artifacts.filter((artifact) => artifact.kind === 'unreadable-text').length;
 
   return {
     kind: CAPSULE_KIND,
     version: CAPSULE_VERSION,
     source: {
-      inputPath,
+      inputPath: sourceLabel,
     },
     artifacts,
     summary: {
       artifactCount: artifacts.length,
       processedCount,
       ignoredCount,
+      unreadableCount,
       warningCount,
       malformedCount: artifacts.filter((artifact) => artifact.kind === 'malformed-json').length,
     },
