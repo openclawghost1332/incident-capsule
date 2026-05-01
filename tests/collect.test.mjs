@@ -21,4 +21,6 @@ test('collectArtifacts walks the fixture incident directory and classifies suppo
       { relativePath: 'telemetry.json', kind: 'json', supported: true },
     ]
   );
+
+  assert.equal(artifacts[0].size > 0, true);
 });
