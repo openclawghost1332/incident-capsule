@@ -32,6 +32,8 @@ If you expose the bin on your PATH, the equivalent command is `incident-capsule 
 - `--format markdown` prints a handoff-friendly markdown summary.
 - `--format capsule` prints the raw `incident-capsule` artifact, including preserved excerpts and parsed JSON, for downstream tools.
 
+For Stack Sleuth interop today, the source incident folder should use Stack Sleuth-style filenames such as `current.log`, `baseline.log`, `candidate.log`, `timeline.log`, or `notebook.md` so the downstream capsule router has deterministic workflow inputs.
+
 ## Sample report
 
 `npm run sample` regenerates `sample/report.json` from the committed demo incident. Open `index.html` in a static server to inspect the same sample report in the browser.
