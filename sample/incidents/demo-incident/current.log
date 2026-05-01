@@ -1,0 +1,4 @@
+2026-04-30T12:02:00Z INFO deploy started service=checkout-api owner=payments-oncall
+2026-04-30T12:05:00Z ERROR TypeError: Cannot read properties of undefined requestId=123 checkout step failed
+2026-04-30T12:06:00Z ERROR TypeError: Cannot read properties of undefined requestId=456 checkout step failed
+2026-04-30T12:07:00Z WARN retrying checkout worker service=checkout-api

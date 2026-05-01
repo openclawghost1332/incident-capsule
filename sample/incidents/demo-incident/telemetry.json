@@ -1,0 +1,13 @@
+{
+  "service": "checkout-api",
+  "owner": "payments-oncall",
+  "events": [
+    {
+      "timestamp": "2026-04-30T12:03:00Z",
+      "summary": "latency crossed 2s"
+    }
+  ],
+  "errors": [
+    "TypeError: Cannot read properties of undefined"
+  ]
+}

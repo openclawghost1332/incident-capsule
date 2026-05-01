@@ -1,0 +1,12 @@
+{
+  "name": "incident-capsule",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "incident-capsule": "./bin/incident-capsule.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "sample": "node ./scripts/generate-sample-report.mjs"
+  }
+}
