@@ -9,5 +9,6 @@ test('README documents pack usage, output formats, and the sample report', async
 
   assert.match(readme, /incident-capsule pack --input/);
   assert.match(readme, /--format json/);
+  assert.match(readme, /--format capsule/);
   assert.match(readme, /sample report/i);
 });

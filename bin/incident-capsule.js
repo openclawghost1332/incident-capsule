@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { buildCapsule } from '../src/normalize.js';
 import { buildReport, renderMarkdown, renderTable } from '../src/render.js';
 
 function parseArgs(argv) {
@@ -28,7 +29,7 @@ async function main() {
   const { command, inputPath, format } = parseArgs(process.argv.slice(2));
 
   if (command !== 'pack') {
-    process.stderr.write('Usage: incident-capsule pack --input <dir> --format table|json|markdown\n');
+    process.stderr.write('Usage: incident-capsule pack --input <dir> --format table|json|markdown|capsule\n');
     process.exitCode = 1;
     return;
   }
@@ -36,6 +37,12 @@ async function main() {
   if (!inputPath) {
     process.stderr.write('Missing required --input <dir> argument\n');
     process.exitCode = 1;
+    return;
+  }
+
+  if (format === 'capsule') {
+    const capsule = await buildCapsule({ inputPath });
+    process.stdout.write(JSON.stringify(capsule, null, 2) + '\n');
     return;
   }
 

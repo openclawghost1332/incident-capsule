@@ -19,6 +19,7 @@ npm test
 ./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format table
 ./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format json
 ./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format markdown
+./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format capsule
 npm run sample
 ```
 
@@ -29,6 +30,7 @@ If you expose the bin on your PATH, the equivalent command is `incident-capsule 
 - `--format table` prints a terminal summary.
 - `--format json` prints the full portable `incident-capsule-report` JSON.
 - `--format markdown` prints a handoff-friendly markdown summary.
+- `--format capsule` prints the raw `incident-capsule` artifact, including preserved excerpts and parsed JSON, for downstream tools.
 
 ## Sample report
 
