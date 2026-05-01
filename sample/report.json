@@ -27,11 +27,6 @@
       },
       {
         "timestamp": "2026-04-30T12:03:00Z",
-        "summary": "\"timestamp\": \"\",",
-        "source": "telemetry.json"
-      },
-      {
-        "timestamp": "2026-04-30T12:03:00Z",
         "summary": "latency crossed 2s",
         "source": "telemetry.json"
       },

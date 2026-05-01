@@ -7,23 +7,14 @@
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <main class="page">
-      <header>
-        <p class="eyebrow">Static sample report</p>
-        <h1>Incident Capsule</h1>
-        <p>Portable incident evidence, rendered from the same JSON contract the CLI emits.</p>
-      </header>
-      <div data-report-root></div>
-    </main>
-    <script type="module">
-      import { bootSampleReport } from './src/sample-report.js';
-
-      bootSampleReport().catch((error) => {
-        const target = document.querySelector('[data-report-root]');
-        if (target) {
-          target.innerHTML = `<p class="warning">${error.message}</p>`;
-        }
-      });
-    </script>
+    <div data-report-root>
+      <main class="page">
+        <section class="card">
+          <p class="eyebrow">Loading sample report...</p>
+          <h1>Incident Capsule</h1>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./src/browser.js"></script>
   </body>
 </html>

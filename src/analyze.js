@@ -19,6 +19,10 @@ function parseTimelineFromText(artifact) {
     return [];
   }
 
+  if (artifact.kind === 'json') {
+    return [];
+  }
+
   const timeline = [];
   const lines = artifact.excerpt.split(/\r?\n/);
 

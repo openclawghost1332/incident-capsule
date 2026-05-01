@@ -1,64 +1,52 @@
-# incident-capsule
+# Incident Capsule
 
-Turn a messy incident folder into a deterministic portable report.
+Incident Capsule is a deterministic Node CLI plus static browser report for turning a messy incident folder into one portable, reviewable report.
 
-Incident Capsule scans one directory recursively, preserves what it could and could not understand, extracts a compact timeline plus repeated error signatures, and emits the same structured JSON contract to both CLI output and the static sample report.
+It ingests mixed artifacts such as markdown notes, logs, JSON, and ignored binary/image files, then emits:
+- a versioned `incident-capsule` artifact model
+- a shared `incident-capsule-report` contract for CLI and browser rendering
+- visible warnings for malformed JSON and ignored artifacts
+- timeline events, repeated signatures, and service/owner hints
 
-## Features
+## Why it exists
 
-- recursive ingestion for markdown, logs, text, JSON, and image inventory artifacts
-- visible warnings for malformed JSON, ignored binary/image files, and truncated excerpts
-- derived summary counts for processed, ignored, and warning-bearing artifacts
-- repeated signature grouping and basic service or owner hints
-- table, markdown, and JSON CLI outputs
-- static browser report powered by `sample/report.json`
+During an incident, the evidence usually lives in a rough folder, not a clean system. Incident Capsule gives responders a deterministic way to pack that folder into something portable enough to hand off, inspect in a terminal, or open in a browser.
 
-## Install
-
-```bash
-npm install
-```
-
-## CLI
-
-```bash
-node ./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format table
-node ./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format markdown
-node ./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format json
-```
-
-The packaged command shape is:
-
-```bash
-incident-capsule pack --input <dir> --format table|json|markdown
-```
-
-## Sample report
-
-Generate the saved sample report from the committed fixture with:
-
-```bash
-npm run sample
-```
-
-Then serve the repo statically and open `index.html` to view the browser report powered by `sample/report.json`.
-
-## Output contract
-
-The shared report schema starts with:
-
-```json
-{
-  "kind": "incident-capsule-report",
-  "version": "1"
-}
-```
-
-Warnings are first-class. Malformed JSON stays visible as `malformed-json`, and binary or image artifacts stay visible as ignored entries instead of disappearing.
-
-## Development
+## Usage
 
 ```bash
 npm test
-git diff --check
+./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format table
+./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format json
+./bin/incident-capsule.js pack --input ./sample/incidents/demo-incident --format markdown
+npm run sample
+```
+
+If you expose the bin on your PATH, the equivalent command is `incident-capsule pack --input ./sample/incidents/demo-incident --format json`.
+
+## Output formats
+
+- `--format table` prints a terminal summary.
+- `--format json` prints the full portable `incident-capsule-report` JSON.
+- `--format markdown` prints a handoff-friendly markdown summary.
+
+## Sample report
+
+`npm run sample` regenerates `sample/report.json` from the committed demo incident. Open `index.html` in a static server to inspect the same sample report in the browser.
+
+## Fixture coverage
+
+The committed sample incident includes:
+- markdown notes with timestamps and owner hints
+- log lines with repeated signatures
+- valid telemetry JSON
+- malformed JSON that stays visible as a warning-bearing artifact
+- an ignored screenshot artifact that still appears in the report
+
+## Development
+
+This repo uses the built-in Node test runner.
+
+```bash
+npm test
 ```

@@ -1,55 +1,104 @@
+import { fetchSampleReport } from './sample-report.js';
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
 
-function renderList(items, emptyLabel, mapper) {
+function renderList(items, renderItem) {
   if (!items.length) {
-    return `<li>${escapeHtml(emptyLabel)}</li>`;
+    return '<li>none</li>';
   }
 
-  return items.map(mapper).join('');
+  return items.map(renderItem).join('');
 }
 
 export function renderBrowserReport(report) {
+  const signatures = renderList(
+    report.analysis.signatures,
+    (item) => `<li><code>${escapeHtml(item.signature)}</code> <span class="pill">${item.count}x</span></li>`
+  );
+  const timeline = renderList(
+    report.analysis.timeline,
+    (event) => `<li><strong>${escapeHtml(event.timestamp)}</strong> ${escapeHtml(event.summary)} <span class="muted">(${escapeHtml(event.source)})</span></li>`
+  );
+  const artifacts = renderList(
+    report.artifacts,
+    (artifact) => `<li><code>${escapeHtml(artifact.relativePath)}</code> <span class="muted">${escapeHtml(artifact.kind)}</span></li>`
+  );
+  const warnings = renderList(
+    report.artifacts.filter((artifact) => Array.isArray(artifact.warnings) && artifact.warnings.length > 0),
+    (artifact) => `<li><code>${escapeHtml(artifact.relativePath)}</code> ${escapeHtml(artifact.warnings.join('; '))}</li>`
+  );
+
   return `
     <section class="hero">
+      <p class="eyebrow">Deterministic incident capsule</p>
       <h1>Incident Capsule</h1>
-      <p class="lede">Deterministic incident evidence capsule for ${escapeHtml(report.analysis.serviceHints.join(', ') || 'unknown services')}.</p>
-      <div class="summary-grid">
-        <article><h2>Artifacts</h2><p>${report.summary.artifactCount}</p></article>
-        <article><h2>Processed</h2><p>${report.summary.processedCount}</p></article>
-        <article><h2>Ignored</h2><p>${report.summary.ignoredCount}</p></article>
-        <article><h2>Warnings</h2><p>${report.summary.warningCount}</p></article>
-      </div>
+      <p class="lede">Portable mixed-artifact incident summary with the same report contract for CLI and browser views.</p>
     </section>
-    <section>
-      <h2>Repeated signatures</h2>
-      <ul>
-        ${renderList(report.analysis.signatures, 'No repeated signatures detected.', (item) => `<li><strong>${escapeHtml(item.signature)}</strong> <span>x${item.count}</span></li>`)}
-      </ul>
+
+    <section class="grid stats">
+      <article class="card"><h2>${report.summary.artifactCount}</h2><p>artifacts</p></article>
+      <article class="card"><h2>${report.summary.processedCount}</h2><p>processed</p></article>
+      <article class="card"><h2>${report.summary.ignoredCount}</h2><p>ignored</p></article>
+      <article class="card"><h2>${report.summary.warningCount}</h2><p>warnings</p></article>
     </section>
-    <section>
-      <h2>Timeline</h2>
-      <ul>
-        ${renderList(report.analysis.timeline, 'No timeline events detected.', (event) => `<li><strong>${escapeHtml(event.timestamp)}</strong> ${escapeHtml(event.summary)} <span class="muted">${escapeHtml(event.source)}</span></li>`)}
-      </ul>
+
+    <section class="grid two-up">
+      <article class="card">
+        <h2>Service hints</h2>
+        <p>${escapeHtml(report.analysis.serviceHints.join(', ') || 'none')}</p>
+        <h3>Owner hints</h3>
+        <p>${escapeHtml(report.analysis.ownerHints.join(', ') || 'none')}</p>
+      </article>
+      <article class="card">
+        <h2>Top repeated signatures</h2>
+        <ul>${signatures}</ul>
+      </article>
     </section>
-    <section>
+
+    <section class="grid two-up">
+      <article class="card">
+        <h2>Timeline</h2>
+        <ul>${timeline}</ul>
+      </article>
+      <article class="card">
+        <h2>Warnings</h2>
+        <ul>${warnings}</ul>
+      </article>
+    </section>
+
+    <section class="card">
       <h2>Artifacts</h2>
-      <ul>
-        ${renderList(report.artifacts, 'No artifacts collected.', (artifact) => `<li><strong>${escapeHtml(artifact.relativePath)}</strong> ${escapeHtml(artifact.kind)}${artifact.warnings.length ? ` <span class="warning">${escapeHtml(artifact.warnings.join('; '))}</span>` : ''}</li>`)}
-      </ul>
+      <ul>${artifacts}</ul>
     </section>
   `;
 }
 
-export function mountBrowserReport({ report, document = globalThis.document, target = document?.querySelector('[data-report-root]') } = {}) {
-  if (!target) {
-    throw new Error('Browser report target not found.');
+export function renderBrowserShell(report) {
+  return `<main class="page">${renderBrowserReport(report)}</main>`;
+}
+
+export async function bootstrapBrowserReport() {
+  const mount = document.querySelector('[data-report-root]');
+
+  if (!mount) {
+    return;
   }
 
-  target.innerHTML = renderBrowserReport(report);
+  try {
+    const report = await fetchSampleReport();
+    mount.innerHTML = renderBrowserShell(report);
+  } catch (error) {
+    mount.innerHTML = `<main class="page"><section class="card error"><h1>Incident Capsule</h1><p>${escapeHtml(error.message)}</p></section></main>`;
+  }
+}
+
+if (typeof document !== 'undefined') {
+  bootstrapBrowserReport();
 }
