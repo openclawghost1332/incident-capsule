@@ -6,7 +6,7 @@ const TEXT_KINDS = new Set(['log', 'markdown', 'json']);
 export function inferArtifactKind(relativePath) {
   const lowerPath = relativePath.toLowerCase();
 
-  if (lowerPath.endsWith('.log') || lowerPath.endsWith('.txt')) return 'log';
+  if (lowerPath.endsWith('.log') || lowerPath.endsWith('.txt') || lowerPath.endsWith('.casebook')) return 'log';
   if (lowerPath.endsWith('.md')) return 'markdown';
   if (lowerPath.endsWith('.json')) return 'json';
   if (lowerPath.endsWith('.png') || lowerPath.endsWith('.jpg') || lowerPath.endsWith('.jpeg') || lowerPath.endsWith('.webp') || lowerPath.endsWith('.gif')) return 'image';

@@ -1,0 +1,11 @@
+=== release-2026-04-15 ===
+TypeError: Cannot read properties of undefined (reading 'name')
+    at renderProfile (/app/src/profile.js:88:17)
+    at updateView (/app/src/view.js:42:5)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+=== release-2026-04-16 ===
+TypeError: Cannot read properties of undefined (reading 'email')
+    at renderInvoice (/app/src/invoice.js:19:7)
+    at refreshBilling (/app/src/billing.js:57:3)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)

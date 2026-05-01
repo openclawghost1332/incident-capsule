@@ -16,6 +16,7 @@ test('collectArtifacts walks the fixture incident directory and classifies suppo
     [
       { relativePath: 'bad.json', kind: 'json', supported: true },
       { relativePath: 'current.log', kind: 'log', supported: true },
+      { relativePath: 'history.casebook', kind: 'log', supported: true },
       { relativePath: 'notes.md', kind: 'markdown', supported: true },
       { relativePath: 'screenshots/checkout.png', kind: 'image', supported: false },
       { relativePath: 'telemetry.json', kind: 'json', supported: true },

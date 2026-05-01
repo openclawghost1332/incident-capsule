@@ -3,7 +3,7 @@ import { promises as fs } from 'node:fs';
 import { collectArtifacts } from './collect.js';
 
 const CAPSULE_KIND = 'incident-capsule';
-const CAPSULE_VERSION = '1';
+const CAPSULE_VERSION = '2';
 const EXCERPT_LIMIT = 4000;
 
 function withWarnings(artifact, warnings) {
@@ -24,6 +24,7 @@ async function readTextArtifact(artifact) {
       kind: 'unreadable-text',
       warnings: [error.message],
       contentLength: 0,
+      content: '',
       excerpt: '',
     };
   }
@@ -37,6 +38,7 @@ async function readTextArtifact(artifact) {
 
   return {
     ...artifact,
+    content,
     excerpt,
     warnings,
     contentLength: content.length,
@@ -61,7 +63,7 @@ async function normalizeArtifact(artifact) {
   }
 
   try {
-    const parsed = JSON.parse(await fs.readFile(artifact.absolutePath, 'utf8'));
+    const parsed = JSON.parse(textArtifact.content);
     return {
       ...textArtifact,
       parsed,

@@ -30,9 +30,9 @@ If you expose the bin on your PATH, the equivalent command is `incident-capsule 
 - `--format table` prints a terminal summary.
 - `--format json` prints the full portable `incident-capsule-report` JSON.
 - `--format markdown` prints a handoff-friendly markdown summary.
-- `--format capsule` prints the raw `incident-capsule` artifact, including preserved excerpts and parsed JSON, for downstream tools.
+- `--format capsule` prints the raw `incident-capsule` artifact. The current version 2 contract preserves concise `excerpt` fields for summaries while also storing full supported text and JSON payloads in a `content` field. This richer content field ships alongside `parsed` JSON when valid.
 
-For Stack Sleuth interop today, the source incident folder should use Stack Sleuth-style filenames such as `current.log`, `baseline.log`, `candidate.log`, `timeline.log`, or `notebook.md` so the downstream capsule router has deterministic workflow inputs.
+For Stack Sleuth interop today, the source incident folder should use Stack Sleuth-style filenames such as `current.log`, `history.casebook`, `baseline.log`, `candidate.log`, `timeline.log`, or `notebook.md` so the downstream capsule router has deterministic workflow inputs. Malformed JSON stays visible with warnings and now also preserves raw `content` for downstream debugging.
 
 ## Sample report
 
